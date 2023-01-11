@@ -78,5 +78,21 @@ namespace EmployeesCrud.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(Employee deleteEmployee)
+        {
+            var employee = await _dataContext.Employees.FindAsync(deleteEmployee.Id);
+
+            if (employee != null)
+            {
+                _dataContext.Employees.Remove(employee);
+                await _dataContext.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
