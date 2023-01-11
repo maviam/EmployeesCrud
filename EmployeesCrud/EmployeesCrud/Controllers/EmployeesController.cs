@@ -56,5 +56,27 @@ namespace EmployeesCrud.Controllers
             var employee = await _dataContext.Employees.Where(e => e.Id == id).SingleOrDefaultAsync();
             return View(employee);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Employee updateEmployee)
+        {
+            var employee = await _dataContext.Employees.FindAsync(updateEmployee.Id);
+            
+            if (employee != null) 
+            { 
+                employee.Name = updateEmployee.Name;
+                employee.Email = updateEmployee.Email;
+                employee.Salary = updateEmployee.Salary;
+                employee.DateOfBirth = updateEmployee.DateOfBirth;
+                employee.Department = updateEmployee.Department;
+
+                _dataContext.Employees.Update(employee);
+                await _dataContext.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
