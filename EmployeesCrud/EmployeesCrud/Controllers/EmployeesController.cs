@@ -4,6 +4,7 @@ using EmployeesCrud.Models.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EmployeesCrud.Controllers
 {
@@ -47,6 +48,13 @@ namespace EmployeesCrud.Controllers
             // Save changes in the database
             await _dataContext.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet] 
+        public async Task<IActionResult> Edit(Guid id) 
+        {
+            var employee = await _dataContext.Employees.Where(e => e.Id == id).SingleOrDefaultAsync();
+            return View(employee);
         }
     }
 }
