@@ -2,6 +2,8 @@
 using EmployeesCrud.Models;
 using EmployeesCrud.Models.Domain;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace EmployeesCrud.Controllers
 {
@@ -12,6 +14,13 @@ namespace EmployeesCrud.Controllers
         public EmployeesController(DataContext dataContext)
         {
             _dataContext = dataContext;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var employees = await _dataContext.Employees.ToListAsync();
+            return View(employees);
         }
 
         [HttpGet]
@@ -37,7 +46,7 @@ namespace EmployeesCrud.Controllers
             await _dataContext.Employees.AddAsync(employee);
             // Save changes in the database
             await _dataContext.SaveChangesAsync();
-            return RedirectToAction(nameof(Add));
+            return RedirectToAction(nameof(Index));
         }
     }
 }
